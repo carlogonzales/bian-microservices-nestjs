@@ -1,0 +1,1 @@
+podman play kube --down .\infra\dev\kube\infra.yaml
