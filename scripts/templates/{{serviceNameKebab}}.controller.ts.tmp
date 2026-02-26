@@ -1,0 +1,12 @@
+import { Controller, Get } from "@nestjs/common";
+import { {{serviceNamePascal}}Service } from "./{{serviceNameKebab}}.service";
+
+@Controller("{{serviceNameKebab}}")
+export class {{serviceNamePascal}}Controller {
+  constructor(private readonly svc: {{serviceNamePascal}}Service) {}
+
+  @Get()
+  hello() {
+    return this.svc.hello();
+  }
+}
