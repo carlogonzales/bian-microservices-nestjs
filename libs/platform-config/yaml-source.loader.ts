@@ -9,7 +9,7 @@ function isObject(value: any): value is PlainObject {
 }
 
 function deepMerge(target: PlainObject, source: PlainObject): PlainObject {
-    const out: PlainObject = { ...target };
+    const out: PlainObject = {...target};
     for (const [k, v] of Object.entries(source)) {
         out[k] = isObject(v) && isObject(out[k]) ? deepMerge(out[k], v) : v;
     }
@@ -17,7 +17,7 @@ function deepMerge(target: PlainObject, source: PlainObject): PlainObject {
 }
 
 
-const logger: Logger = new Logger('YamlConfigLoader', { timestamp: true });
+const logger: Logger = new Logger('YamlConfigLoader', {timestamp: true});
 
 function toKebabCase(str: string) {
     return str
@@ -70,7 +70,7 @@ export function loadYamlSource(): PlainObject {
                 throw error;
             }
         }
-        if (!found) {
+        if (!found && configName !== 'global') {
             throw new Error(`Configuration file for ${configName} not found in any of the candidate folders.`);
         }
     }
