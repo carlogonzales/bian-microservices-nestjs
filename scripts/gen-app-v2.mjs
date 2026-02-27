@@ -125,6 +125,13 @@ function toPascalCase(str) {
     .join('');
 }
 
+function toSnakeCase(str) {
+  return str
+    .replace(/([a-z])([A-Z])/g, '$1_$2') // handle camelCase to snake_case
+    .replace(/[-\s]+/g, '_') // handle kebab-case and spaces to snake_case
+    .toLowerCase();
+}
+
 function replacePlaceholders(str, dict) {
   return str.replace(/\{\{(\w+)\}\}/g, (m, key) =>
     Object.prototype.hasOwnProperty.call(dict, key) ? String(dict[key]) : m,
@@ -134,7 +141,7 @@ function replacePlaceholders(str, dict) {
 async function installDeps(serviceName) {
   // Install only what the app needs (scoped), not workspace root - keeps ownership clear.
   run('pnpm', ['--filter', serviceName, 'add', '@nestjs/config', 'class-validator', 'class-transformer']);
-  run('pnpm', ['--filter', serviceName, 'add', '@prisma/client']);
+  run('pnpm', ['--filter', serviceName, 'add', '@prisma/client', 'pg', '@prisma/adapter-pg']);
   run('pnpm', ['--filter', serviceName, 'add', 'decimal.js']);
 }
 
@@ -220,6 +227,7 @@ async function main() {
   const serviceName = args.name;
   const serviceNameKebab = serviceName.toLowerCase();
   const serviceNamePascal = toPascalCase(serviceNameKebab);
+  const serviceNameSnake = toSnakeCase(serviceNameKebab);
   const servicePort = options.port || 3000;
 
   const appFolder = path.join(APPS_FOLDER, serviceNameKebab);
@@ -265,6 +273,7 @@ async function main() {
     serviceName,
     serviceNameKebab,
     serviceNamePascal,
+    serviceNameSnake,
     servicePort,
   });
 
