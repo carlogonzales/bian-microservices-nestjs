@@ -1,4 +1,4 @@
-import {CommonDBPoolConfig, ConfigNamespace, DBWithSchemaConfig, PlainObject} from "@libs/platform-config/types";
+import {CommonDBPoolConfig, ConfigNamespace, DBWithSchemaConfig} from "@libs/platform-config/types";
 import Joi from "joi";
 
 
