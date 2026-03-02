@@ -1,0 +1,7 @@
+bianMsDb:
+  hostname: localhost
+  port: 5432
+  username: admin
+  password: admin
+  database: postgres
+  schema: bianms

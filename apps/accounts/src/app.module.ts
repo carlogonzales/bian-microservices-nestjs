@@ -5,13 +5,13 @@ import { AccountsModule } from './accounts/accounts.module';
 import { LoggerModule } from 'nestjs-pino';
 import { LoggerOptions } from 'pino';
 import { PlatformConfigModule } from '@libs/platform-config';
-import { accountsDatabaseConfigNamespace } from '@libs/config';
+import { bianMsDatabaseConfigNamespace } from '@libs/config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PlatformConfigModule.forRoot({
-      namespaces: [accountsDatabaseConfigNamespace],
+      namespaces: [bianMsDatabaseConfigNamespace],
     }),
     PrismaModule,
     AccountsModule,

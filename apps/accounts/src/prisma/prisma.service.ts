@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Pool, PoolConfig } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { ACCOUNTS_DATABASE_CONFIG, AccountsDatabaseConfig } from '@libs/config';
+import { BIAN_MS_DATABASE_CONFIG, BianMsDatabaseConfig } from '@libs/config';
 import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
@@ -15,19 +15,19 @@ export class PrismaService
   extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel>
   implements OnModuleInit, OnModuleDestroy
 {
-  private readonly accountsDbConfig: AccountsDatabaseConfig;
+  private readonly bianMsDbConfig: BianMsDatabaseConfig;
 
   constructor(
     private readonly logger: PinoLogger,
-    @Inject(ACCOUNTS_DATABASE_CONFIG)
-    accountsDbConfig: AccountsDatabaseConfig,
+    @Inject(BIAN_MS_DATABASE_CONFIG)
+    bianMsDbConfig: BianMsDatabaseConfig,
   ) {
     const poolConfig: PoolConfig = {
-      user: accountsDbConfig.username,
-      host: accountsDbConfig.hostname,
-      database: accountsDbConfig.database,
-      password: accountsDbConfig.password,
-      port: accountsDbConfig.port,
+      user: bianMsDbConfig.username,
+      host: bianMsDbConfig.hostname,
+      database: bianMsDbConfig.database,
+      password: bianMsDbConfig.password,
+      port: bianMsDbConfig.port,
       max: 5,
       min: 1,
       idleTimeoutMillis: 30000, // 30 seconds
@@ -35,7 +35,7 @@ export class PrismaService
     const pool = new Pool(poolConfig);
     super({
       adapter: new PrismaPg(pool, {
-        schema: accountsDbConfig.schema,
+        schema: bianMsDbConfig.schema,
       }),
       log: [
         { level: 'error', emit: 'event' },
@@ -65,7 +65,7 @@ export class PrismaService
       ),
     );
 
-    this.accountsDbConfig = accountsDbConfig;
+    this.bianMsDbConfig = bianMsDbConfig;
   }
 
   async onModuleInit(): Promise<void> {
