@@ -3,12 +3,20 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-
     "composite": true,
     "declaration": true
   },
-  "include": ["src/**/*.ts"],
-  "references": [
-    { "path": "../platform-config" },
+  "include": [
+    "src/**/*.ts"
   ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test"
+  ],
+  "references": [
+    {
+      "path": "../platform-config"
+    }
+  ]
 }

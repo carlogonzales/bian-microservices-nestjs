@@ -11,7 +11,7 @@
     }
   },
   "scripts": {
-    "build": "tsc -b",
-    "clean": "rimraf dist *.tsbuildinfo"
+    "build": "pnpm run clean && tsc -b",
+    "clean": "rimraf --glob dist *.tsbuildinfo"
   }
 }
