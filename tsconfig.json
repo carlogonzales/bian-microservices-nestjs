@@ -9,8 +9,10 @@
     "declarationMap": true,
     "sourceMap": true,
 
-    "baseUrl": ".",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
 
+    "baseUrl": ".",
     "paths": {
       "@libs/contracts/*": ["./libs/contracts/*"],
       "@libs/common/*": ["./libs/common/*"],

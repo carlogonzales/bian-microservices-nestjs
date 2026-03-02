@@ -33,13 +33,16 @@ function splitCSV(str: string): string[] {
 export function loadYamlSource(): PlainObject {
     logger.log('Load YAML config');
     const env = process.env.NODE_ENV || 'dev';
-    const candidateConfigList = ['global', ...splitCSV(process.env.CONFIGS || '').map(config => toKebabCase(config))];
+    const candidateConfigList = [...splitCSV(process.env.CONFIGS || '').map(config => toKebabCase(config))];
     logger.log(`Load YAML config with env: ${env} and candidate config list: ${candidateConfigList.join(', ')}`);
 
     const OS_TYPE = process.platform; // 'win32' for Windows, 'darwin' for macOS, 'linux' for Linux
     logger.log(`Load YAML config with OS TYPE: ${OS_TYPE}`);
 
     const candidateConfigFolders: string[] = [
+        ...(process.env.CONFIGS_FOLDER
+            ? [process.env.CONFIGS_FOLDER]
+            : []),
         `${process.cwd()}/config`,
         `${process.env.HOME || process.env.USERPROFILE}/.config/bian`,
         OS_TYPE === 'win32' ? `${process.env.APPDATA}/bian` : '/etc/bian',
@@ -50,7 +53,7 @@ export function loadYamlSource(): PlainObject {
     for (const configName of candidateConfigList) {
         let found = false;
         for (const folder of candidateConfigFolders) {
-            const filePath = `${folder}/${configName}.${env}.yaml`;
+            const filePath = `${folder}/${configName}.${env}.config.yaml`;
             if (!fs.existsSync(filePath)) {
                 continue; // File does not exist, try the next folder
             }
