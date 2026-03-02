@@ -1,17 +1,18 @@
-import {CommonDBPoolConfig, ConfigNamespace, DBWithSchemaConfig} from "@libs/platform-config/types";
+import {CommonDBPoolConfig, ConfigNamespace, DBWithSchemaConfig} from "@libs/platform-config";
 import Joi from "joi";
 
 
 export const ACCOUNTS_DATABASE_CONFIG: symbol = Symbol.for('ACCOUNTS_DATABASE') as symbol;
 
-export interface AccountsDatabaseConfig extends DBWithSchemaConfig, CommonDBPoolConfig {}
+export interface AccountsDatabaseConfig extends DBWithSchemaConfig, CommonDBPoolConfig {
+}
 
 export const accountsDatabaseConfigNamespace: ConfigNamespace<AccountsDatabaseConfig> = {
     key: 'accountsDb',
     token: ACCOUNTS_DATABASE_CONFIG,
     factory: (srcConfig, env): AccountsDatabaseConfig => {
         return {
-            hostname: srcConfig.accountsDb.hostname || env.ACCOUNTS_DB_HOSTNAME,
+            hostname: srcConfig.accountsDb.hostname ?? env.ACCOUNTS_DB_HOSTNAME!,
             port: srcConfig.accountsDb.port || env.ACCOUNTS_DB_PORT || 5432,
             username: srcConfig.accountsDb.username || env.ACCOUNTS_DB_USERNAME,
             password: srcConfig.accountsDb.password || env.ACCOUNTS_DB_PASSWORD,
@@ -33,5 +34,11 @@ export const accountsDatabaseConfigNamespace: ConfigNamespace<AccountsDatabaseCo
         password: Joi.string().required(),
         database: Joi.string().required(),
         schema: Joi.string().required(),
+
+        maxPoolSize: Joi.number().optional(),
+        minPoolSize: Joi.number().optional(),
+        connectionTimeoutMillis: Joi.number().optional(),
+        idleTimeoutMillis: Joi.number().optional(),
+        maxLifetimeSeconds: Joi.number().optional(),
     })
 }
