@@ -99,6 +99,15 @@ importers:
 
   apps/accounts:
     dependencies:
+      '@libs/common-logging':
+        specifier: workspace:*
+        version: link:../../libs/common/logging
+      '@libs/config':
+        specifier: workspace:*
+        version: link:../../libs/config
+      '@libs/platform-config':
+        specifier: workspace:*
+        version: link:../../libs/platform-config
       '@nestjs/common':
         specifier: ^11.0.1
         version: 11.1.14(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
