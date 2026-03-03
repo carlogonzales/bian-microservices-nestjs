@@ -25,7 +25,7 @@ import { bianMsDatabaseConfigNamespace } from '@libs/config';
               ? undefined
               : {
                   target: 'pino-pretty',
-                  options: { singleLine: false },
+                  options: { singleLine: true },
                 },
         } as LoggerOptions),
       },

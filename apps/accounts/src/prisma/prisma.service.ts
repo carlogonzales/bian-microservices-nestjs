@@ -28,9 +28,10 @@ export class PrismaService
       database: bianMsDbConfig.database,
       password: bianMsDbConfig.password,
       port: bianMsDbConfig.port,
-      max: 5,
-      min: 1,
-      idleTimeoutMillis: 30000, // 30 seconds
+      max: bianMsDbConfig.maxPoolSize,
+      min: bianMsDbConfig.minPoolSize,
+      idleTimeoutMillis: bianMsDbConfig.idleTimeoutMillis,
+      maxLifetimeSeconds: bianMsDbConfig.maxLifetimeSeconds,
     };
     const pool = new Pool(poolConfig);
     super({
