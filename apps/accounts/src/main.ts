@@ -4,7 +4,9 @@ import { AppModule } from './app.module';
 import { DomainExceptionFilter } from './common/domain-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: ['log', 'error', 'warn', 'debug', 'verbose'],
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -13,9 +15,11 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
   app.useGlobalFilters(new DomainExceptionFilter());
 
-  await app.listen(process.env.PORT ? Number(process.env.PORT) : 3001);
+  const port = process.env.PORT ? Number(process.env.PORT) : 3001;
+  await app.listen(port);
 }
 
 bootstrap().catch((err) => {

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Pool, PoolConfig } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { BIAN_MS_DATABASE_CONFIG, BianMsDatabaseConfig } from '@libs/config';
+import * as BianConfig from '@libs/config';
 import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
@@ -15,12 +15,12 @@ export class PrismaService
   extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel>
   implements OnModuleInit, OnModuleDestroy
 {
-  private readonly bianMsDbConfig: BianMsDatabaseConfig;
+  private readonly bianMsDbConfig: BianConfig.BianMsDatabaseConfig;
 
   constructor(
     private readonly logger: PinoLogger,
-    @Inject(BIAN_MS_DATABASE_CONFIG)
-    bianMsDbConfig: BianMsDatabaseConfig,
+    @Inject(BianConfig.BIAN_MS_DATABASE_CONFIG)
+    bianMsDbConfig: BianConfig.BianMsDatabaseConfig,
   ) {
     const poolConfig: PoolConfig = {
       user: bianMsDbConfig.username,
