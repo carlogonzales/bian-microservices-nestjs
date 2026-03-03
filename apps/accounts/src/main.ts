@@ -1,11 +1,18 @@
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, LogLevel } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DomainExceptionFilter } from './common/domain-exception.filter';
 
 async function bootstrap() {
+  const logLevel: LogLevel[] = [
+    'log',
+    'error',
+    ...(process.env.NODE_ENV === 'prod'
+      ? []
+      : (['warn', 'debug', 'verbose'] as const)),
+  ];
   const app = await NestFactory.create(AppModule, {
-    logger: ['log', 'error', 'warn', 'debug', 'verbose'],
+    logger: logLevel,
   });
 
   app.useGlobalPipes(
