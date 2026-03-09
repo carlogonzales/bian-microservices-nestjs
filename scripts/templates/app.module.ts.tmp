@@ -1,33 +1,45 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
-import { PrismaModule } from "./prisma/prisma.module";
-import { HealthModule } from "./health/health.module";
-import { {{serviceNamePascal}}Module } from "./{{serviceNameKebab}}/{{serviceNameKebab}}.module";
+import { PrismaModule } from './prisma/prisma.module';
+import { HealthModule } from './health/health.module';
+import { {{serviceNamePascal}}Module } from './{{serviceNameKebab}}/{{serviceNameKebab}}.module';
+import { ConfigModule } from '@nestjs/config';
+import { PlatformConfigModule } from '@libs/platform-config';
+import { bianMsDatabaseConfigNamespace } from '@libs/config';
+import { LoggerModule } from 'nestjs-pino';
+import {
+  CorrelationMiddleware,
+  CorrelationModule,
+} from '@libs/nest-correlation';
 
 @Module({
   imports: [
     {{serviceNamePascal}}Module,
+    CorrelationModule,
     HealthModule,
     PrismaModule,
     ConfigModule.forRoot({ isGlobal: true }),
     PlatformConfigModule.forRoot({
       namespaces: [bianMsDatabaseConfigNamespace],
     }),
+    PrismaModule,
     LoggerModule.forRoot({
       pinoHttp: {
         level: process.env.NODE_ENV === 'prod' ? 'info' : 'debug',
         redact: ['req.headers.authorization'], // redact sensitive data
-        ...({
-          transport:
-            process.env.NODE_ENV === 'prod'
-              ? undefined
-              : {
-                  target: 'pino-pretty',
-                  options: { singleLine: true },
-                },
-        } as LoggerOptions),
+        transport:
+          process.env.NODE_ENV === 'prod'
+            ? undefined
+            : {
+                target: 'pino-pretty',
+                options: { singleLine: true },
+              },
       },
     }),
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): any {
+    consumer.apply(CorrelationMiddleware).forRoutes('*');
+  }
+}

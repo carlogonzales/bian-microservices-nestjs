@@ -15,6 +15,8 @@ const APP_INTERNAL_DEPENDENCIES = [
     '@libs/common-logging@workspace:*',
     '@libs/config@workspace:*',
     '@libs/platform-config@workspace:*',
+    '@libs/nest-correlation@workspace:*',
+    '@libs/prisma-tx@workspace:*',
 ]
 
 const APP_DEPENDENCIES = [
